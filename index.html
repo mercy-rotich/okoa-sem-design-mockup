@@ -1,0 +1,2168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okoa Sem - Access Past Papers & Study Resources</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #C4F82A;
+            --primary-dark: #A8D624;
+            --secondary: #B4A7FF;
+            --dark: #0A0A0A;
+            --dark-card: #1A1A1A;
+            --text-gray: #A0A0A0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--dark);
+            color: white;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--dark);
+            padding: 1.5rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #2A2A2A;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: var(--primary);
+            color: var(--dark);
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cta-button {
+            background: var(--primary);
+            color: var(--dark);
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .cta-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .account-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--dark-card);
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-gray);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .account-icon:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section - Redesigned with Side Stats */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 3rem;
+            align-items: center;
+            padding: 0 5%;
+            background-image: url('/image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.8));
+            z-index: 1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(196, 248, 42, 0.12), transparent 50%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+        }
+
+        .hero-stats {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero .highlight {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-gray);
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1.25rem 3.5rem 1.25rem 1.5rem;
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(26, 26, 26, 0.95);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-gray);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+            margin-top: 2rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--dark);
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.3s, background 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2.5rem;
+            border: 2px solid white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--dark);
+        }
+
+        /* Vertical Stats Cards - Premium Design */
+        .stat-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.85), rgba(26, 26, 26, 0.7));
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(196, 248, 42, 0.15);
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInRight 0.8s ease-out backwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(196, 248, 42, 0.2), transparent);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.3s; }
+        .stat-card:nth-child(2) { animation-delay: 0.5s; }
+        .stat-card:nth-child(3) { animation-delay: 0.7s; }
+        .stat-card:nth-child(4) { animation-delay: 0.9s; }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(26, 26, 26, 0.85));
+            box-shadow: 0 20px 60px rgba(196, 248, 42, 0.25);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover::after {
+            width: 200px;
+            height: 200px;
+        }
+
+        .stat-card .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(196, 248, 42, 0.3));
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-card .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), #FFFFFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-card .stat-label {
+            font-size: 1rem;
+            color: var(--text-gray);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--dark-card);
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid #2A2A2A;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-icon.purple {
+            background: rgba(180, 167, 255, 0.15);
+            color: var(--secondary);
+        }
+
+        .feature-icon.green {
+            background: rgba(196, 248, 42, 0.15);
+            color: var(--primary);
+        }
+
+        .feature-icon.pink {
+            background: rgba(255, 107, 167, 0.15);
+            color: #FF6BA7;
+        }
+
+        .feature-icon.blue {
+            background: rgba(107, 167, 255, 0.15);
+            color: #6BA7FF;
+        }
+
+        .feature-icon.orange {
+            background: rgba(255, 167, 107, 0.15);
+            color: #FFA76B;
+        }
+
+        .feature-icon.cyan {
+            background: rgba(107, 248, 255, 0.15);
+            color: #6BF8FF;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--text-gray);
+        }
+
+        /* Schools Section */
+        .schools {
+            padding: 6rem 5%;
+            background: var(--dark-card);
+        }
+
+        .schools-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .schools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .school-card {
+            background: var(--dark);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid #2A2A2A;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .school-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .school-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .school-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .school-icon.blue { background: rgba(59, 130, 246, 0.2); color: #3B82F6; }
+        .school-icon.green { background: rgba(34, 197, 94, 0.2); color: #22C55E; }
+        .school-icon.amber { background: rgba(251, 191, 36, 0.2); color: #FBBF24; }
+        .school-icon.gray { background: rgba(156, 163, 175, 0.2); color: #9CA3AF; }
+        .school-icon.purple { background: rgba(168, 85, 247, 0.2); color: #A855F7; }
+        .school-icon.pink { background: rgba(236, 72, 153, 0.2); color: #EC4899; }
+        .school-icon.cyan { background: rgba(6, 182, 212, 0.2); color: #06B6D4; }
+        .school-icon.teal { background: rgba(20, 184, 166, 0.2); color: #14B8A6; }
+
+        .school-abbr {
+            font-weight: bold;
+            color: var(--text-gray);
+        }
+
+        .school-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .school-subjects {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .browse-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: transparent;
+            color: white;
+            border: 1px solid #2A2A2A;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .browse-btn:hover {
+            background: var(--primary);
+            color: var(--dark);
+            border-color: var(--primary);
+        }
+
+        .pdf-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(34, 197, 94, 0.2);
+            color: #22C55E;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 6rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: var(--dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .step p {
+            color: var(--text-gray);
+        }
+
+        /* Benefits Section */
+        .benefits-section {
+            padding: 6rem 5%;
+            background: #0F0F0F;
+            min-height: 600px;
+        }
+
+        .benefits-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .benefit-card {
+            background: #1A1A1A;
+            padding: 3rem;
+            border-radius: 20px;
+            border: 2px solid #2A2A2A;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #C4F82A 0%, #B4A7FF 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            border-color: #C4F82A;
+            box-shadow: 0 20px 40px rgba(196, 248, 42, 0.15);
+            background: #1F1F1F;
+        }
+
+        .benefit-card:hover::before {
+            opacity: 1;
+        }
+
+        .benefit-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0); 
+            }
+            50% { 
+                transform: translateY(-10px); 
+            }
+        }
+
+        .benefit-card:nth-child(1) .benefit-icon {
+            animation-delay: 0s;
+        }
+
+        .benefit-card:nth-child(2) .benefit-icon {
+            animation-delay: 0.5s;
+        }
+
+        .benefit-card:nth-child(3) .benefit-icon {
+            animation-delay: 1s;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: #FFFFFF;
+            font-weight: 700;
+        }
+
+        .benefit-card > p {
+            color: #A0A0A0;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .benefit-features {
+            list-style: none;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #2A2A2A;
+            margin: 0;
+        }
+
+        .benefit-features li {
+            color: #A0A0A0;
+            padding: 0.75rem 0;
+            font-size: 1rem;
+            line-height: 1.6;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+
+        .benefit-features li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .benefit-features li:hover {
+            color: #C4F82A;
+            padding-left: 0.5rem;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 6rem 5%;
+            background: var(--dark);
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .pricing-card {
+            background: var(--dark-card);
+            border: 2px solid #2A2A2A;
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(196, 248, 42, 0.05) 0%, var(--dark-card) 100%);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: var(--primary);
+            color: var(--dark);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-amount {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .currency {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-right: 0.25rem;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .pricing-duration {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #2A2A2A;
+            color: var(--text-gray);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-btn {
+            width: 100%;
+            padding: 1rem;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pricing-btn:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .pricing-btn.primary {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .pricing-btn.primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .payment-info {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .payment-badge {
+            display: inline-block;
+            background: rgba(34, 197, 94, 0.2);
+            color: #22C55E;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .payment-info p {
+            color: var(--text-gray);
+        }
+.section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 6rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--dark);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .testimonial-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(26, 26, 26, 0.7));
+            backdrop-filter: blur(10px);
+            border: 2px solid #2A2A2A;
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 150px;
+            color: var(--primary);
+            opacity: 0.1;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(196, 248, 42, 0.2);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dark);
+            flex-shrink: 0;
+        }
+
+        .testimonial-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-meta {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .verified-badge {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22C55E;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .testimonial-content {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-text {
+            color: #E5E5E5;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-rating {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .star {
+            color: #FFA76B;
+            font-size: 1.2rem;
+        }
+
+        .testimonial-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #2A2A2A;
+        }
+
+        .testimonial-date {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+        }
+
+        .testimonial-helpful {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 6rem 5%;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #0F0F0F;
+        }
+
+        .faq-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .faq-item {
+            background: var(--dark-card);
+            border: 2px solid #2A2A2A;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(196, 248, 42, 0.3);
+        }
+
+        .faq-item.active {
+            border-color: var(--primary);
+        }
+
+        .faq-question {
+            padding: 1.75rem 2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        .faq-question:hover {
+            background: rgba(196, 248, 42, 0.05);
+        }
+
+        .faq-item.active .faq-question {
+            background: rgba(196, 248, 42, 0.08);
+        }
+
+        .faq-question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .faq-toggle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(196, 248, 42, 0.15);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .faq-item.active .faq-toggle {
+            background: var(--primary);
+            color: var(--dark);
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 2rem 1.75rem 2rem;
+        }
+
+        .faq-answer-content {
+            color: var(--text-gray);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            padding-left: 2.5rem;
+        }
+
+        .faq-answer-content strong {
+            color: white;
+        }
+
+        .faq-cta {
+            margin-top: 3rem;
+            text-align: center;
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(196, 248, 42, 0.1), rgba(180, 167, 255, 0.1));
+            border-radius: 16px;
+            border: 2px solid rgba(196, 248, 42, 0.2);
+        }
+
+        .faq-cta h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-cta p {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary);
+            color: var(--dark);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonial-card {
+                padding: 2rem;
+            }
+
+            .faq-question {
+                padding: 1.25rem 1.5rem;
+            }
+
+            .faq-question-text {
+                font-size: 1rem;
+            }
+
+            .faq-icon {
+                font-size: 1.2rem;
+            }
+
+            .faq-item.active .faq-answer {
+                padding: 0 1.5rem 1.25rem 1.5rem;
+            }
+
+            .faq-answer-content {
+                padding-left: 0;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 5%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .cta-section .btn-secondary {
+            border-color: var(--dark);
+            color: var(--dark);
+        }
+
+        .cta-section .btn-secondary:hover {
+            background: var(--dark);
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-card);
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid #2A2A2A;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section a {
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #2A2A2A;
+            color: var(--text-gray);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                height: auto;
+                padding: 4rem 5%;
+                text-align: center;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+                margin-top: 3rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero {
+                height: auto;
+                min-height: 100vh;
+                padding: 3rem 5%;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            .stat-card .stat-number {
+                font-size: 2.5rem;
+            }
+
+            .features-grid,
+            .schools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .benefit-card {
+                padding: 2rem;
+            }
+            
+            .benefit-icon {
+                font-size: 2.5rem;
+            }
+            
+            .benefit-card h3 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="#home" class="logo">
+                <div class="logo-icon">🎓</div>
+                <span>Okoa Sem</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#schools">Schools</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-right">
+                <a href="signuppage.html" class="cta-button">Get Started</a>
+                <a href="myaccount.html" class="account-icon" title="My Account">👤</a>
+            </div>
+            <button class="mobile-menu">☰</button>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Never Miss An Exam<br><span class="highlight">Question Pattern</span> Again</h1>
+            <p>Access 24,000+ past papers from 8 schools and 50+ departments. Search by topic, upload notes, and collaborate with study groups.</p>
+            
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Search for papers, topics, or courses...">
+                <span class="search-icon">🔍</span>
+            </div>
+
+            <div class="hero-buttons">
+                <a href="#get-started" class="btn-primary">
+                    Browse Past Papers →
+                </a>
+                <a href="chatbot.html" class="btn-secondary">Try AI Study Bot</a>
+                <a href="youtube.html" class="btn-secondary">📺 Study with YouTube</a>
+            </div>
+        </div>
+
+        <div class="hero-stats">
+            <div class="stat-card">
+                <span class="stat-icon">📚</span>
+                <span class="stat-number">24k+</span>
+                <span class="stat-label">Total Papers</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🏫</span>
+                <span class="stat-number">8</span>
+                <span class="stat-label">Schools</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">📊</span>
+                <span class="stat-number">50+</span>
+                <span class="stat-label">Departments</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">👥</span>
+                <span class="stat-number">10k+</span>
+                <span class="stat-label">Students</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="section-header">
+            <h2>Everything You Need to Excel</h2>
+            <p>Comprehensive tools designed to help you succeed in your academic journey</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon purple">📚</div>
+                <h3>Find Past Papers</h3>
+                <p>Search and access past papers from your specific school and department. Browse by year, semester, and course code.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon green">🧠</div>
+                <h3>Smart Topic Search</h3>
+                <p>Type any topic or unit you're studying and get relevant exam questions with AI-powered sample answers instantly.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon pink">📸</div>
+                <h3>Notes to Questions</h3>
+                <p>Upload images of your study notes and get automatically generated questions to test your understanding.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon blue">🤖</div>
+                <h3>AI Study Bot</h3>
+                <p>Get instant answers to your academic questions, explanations, and guidance from our intelligent study companion.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon orange">👥</div>
+                <h3>Study Groups</h3>
+                <p>Join or create study groups, collaborate with peers, and share resources to succeed together.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon cyan">📤</div>
+                <h3>Share & Collaborate</h3>
+                <p>Share questions with friends and study groups. Help each other succeed in your academic journey.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="schools" id="schools">
+        <div class="schools-container">
+            <div class="section-header">
+                <h2>Browse by School</h2>
+                <p>Access past papers organized by school and department</p>
+            </div>
+
+            <div class="schools-grid">
+                <div class="school-card">
+                    <div class="school-header">
+                        <div class="school-icon blue">💻</div>
+                        <div>
+                            <div class="school-abbr">sci</div>
+                        </div>
+                    </div>
+                    <h3>School of Computing and Informatics</h3>
+                    <p class="school-subjects">Computer Science, IT, Software Engineering</p>
+                    <button class="browse-btn">Browse Papers <span class="pdf-badge">PDF</span></button>
+                </div>
+
+                <div class="school-card">
+                    <div class="school-header">
+                        <div class="school-icon green">🌾</div>
+                        <div>
+                            <div class="school-abbr">safs</div>
+                        </div>
+                    </div>
+                    <h3>School of Agriculture and Food Sciences</h3>
+                    <p class="school-subjects">Agriculture, Food Technology, Nutrition</p>
+                    <button class="browse-btn">Browse Papers <span class="pdf-badge">PDF</span></button>
+                </div>
+
+                <div class="school-card">
+                    <div class="school-header">
+                        <div class="school-icon amber">🏢</div>
+                        <div>
+                            <div class="school-abbr">sbe</div>
+                        </div>
+                    </div>
+                    <h3>School of Business and Economics</h3>
+                    <p class="school-subjects">Business, Economics, Management</p>
+                    <button class="browse-btn">Browse Papers <span class="pdf-badge">PDF</span></button>
+                </div>
+
+                <div class="school-card">
+                    <div class="school-header">
+                        <div class="school-icon gray">🏗️</div>
+                        <div>
+                            <div class="school-abbr">sea</div>
+                        </div>
+                    </div>
+                    <h3>School of Engineering and Architecture</h3>
+                    <p class="school-subjects">Engineering, Architecture, Construction</p>
+                    <button class="browse-btn">Browse Papers <span class="pdf-badge">PDF</span></button>
+                </div>
+
+                <div class="school-card">
+                    <div class="school-header">
+                        <div class="school-icon purple">🎓</div>
+                        <div>
+                            <div class="school-abbr">sed</div>
+                        </div>
+                    </div>
+                    <h3>School of Education</h3>
+                    <p class="school-subjects">Education, Teaching, Curriculum Development</p>
+                    <button class="browse-btn">Browse Papers <span class="pdf-badge">PDF</span></button>
+                </div>
+
+                <div class="school-card">
+                    <div class="school-header">
+                        <div class="school-icon pink">🏥</div>
+                        <div>
+                            <div class="school-abbr">shs</div>
+                        </div>
+                    </div>
+                    <h3>School of Health Sciences</h3>
+                    <p class="school-subjects">Medicine, Nursing, Public Health</p>
+                    <button class="browse-btn">Browse Papers <span class="pdf-badge">PDF</span></button>
+                </div>
+
+                <div class="school-card">
+                    <div class="school-header">
+                        <div class="school-icon cyan">💉</div>
+                        <div>
+                            <div class="school-abbr">son</div>
+                        </div>
+                    </div>
+                    <h3>School of Nursing</h3>
+                    <p class="school-subjects">Nursing, Healthcare, Patient Care</p>
+                    <button class="browse-btn">Browse Papers <span class="pdf-badge">PDF</span></button>
+                </div>
+
+                <div class="school-card">
+                    <div class="school-header">
+                        <div class="school-icon teal">🔬</div>
+                        <div>
+                            <div class="school-abbr">spas</div>
+                        </div>
+                    </div>
+                    <h3>School of Pure and Applied Sciences</h3>
+                    <p class="school-subjects">Mathematics, Physics, Chemistry, Biology</p>
+                    <button class="browse-btn">Browse Papers <span class="pdf-badge">PDF</span></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-header">
+            <h2>How It Works</h2>
+            <p>Get started in three simple steps</p>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Sign Up</h3>
+                <p>Create your account using Google to access all features and personalized content</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Choose Your Plan</h3>
+                <p>Select a subscription plan - Daily (KSh 10) or Monthly (KSh 100) via secure M-Pesa payment</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Study & Excel</h3>
+                <p>Download papers, generate practice questions, chat with AI, and collaborate with peers</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits-section" id="benefits">
+        <div class="benefits-container">
+            <div class="section-header">
+                <h2>Premium Features & Benefits</h2>
+                <p>Everything you get with a premium subscription</p>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <span class="benefit-icon">🤖</span>
+                    <h3>Premium AI Chat</h3>
+                    <p>Unlock intelligent conversations with our AI study assistant</p>
+                    <ul class="benefit-features">
+                        <li>✨ AI-Powered Assistance - Get instant help with your academic questions</li>
+                        <li>💬 Unlimited Conversations - Chat without limits on any topic</li>
+                        <li>🎯 Study Guidance - Personalized learning recommendations</li>
+                    </ul>
+                </div>
+
+                <div class="benefit-card">
+                    <span class="benefit-icon">📥</span>
+                    <h3>Offline Downloads</h3>
+                    <p>Access your study materials anytime, anywhere</p>
+                    <ul class="benefit-features">
+                        <li>📄 Download unlimited PDFs</li>
+                        <li>🖼️ Save images and notes</li>
+                        <li>📊 Track storage usage (0B used)</li>
+                        <li>🔄 Filter by file type</li>
+                    </ul>
+                </div>
+
+                <div class="benefit-card">
+                    <span class="benefit-icon">👤</span>
+                    <h3>Verified Account</h3>
+                    <p>Secure and personalized experience</p>
+                    <ul class="benefit-features">
+                        <li>✓ Verified account status</li>
+                        <li>📧 Email-based authentication</li>
+                        <li>📅 Track membership history</li>
+                        <li>⏰ Monitor last activity</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="pricing-container">
+            <div class="section-header">
+                <h2>Choose Your Plan</h2>
+                <p>Unlock premium access to all past papers and study materials</p>
+            </div>
+
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <div class="pricing-icon">📅</div>
+                        <h3>Daily Plan</h3>
+                        <div class="pricing-amount">
+                            <span class="currency">KSh</span>
+                            <span class="price">10</span>
+                        </div>
+                        <p class="pricing-duration">24 hours access</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ Access all past papers</li>
+                        <li>✓ Smart topic search</li>
+                        <li>✓ Download PDFs</li>
+                        <li>✓ Basic AI assistance</li>
+                    </ul>
+                    <button class="pricing-btn">Select Daily Plan</button>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="popular-badge">Most Popular</div>
+                    <div class="pricing-header">
+                        <div class="pricing-icon">📆</div>
+                        <h3>Monthly Plan</h3>
+                        <div class="pricing-amount">
+                            <span class="currency">KSh</span>
+                            <span class="price">100</span>
+                        </div>
+                        <p class="pricing-duration">30 days access</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ Unlimited past papers access</li>
+                        <li>✓ Premium AI Study Bot</li>
+                        <li>✓ Notes to questions generator</li>
+                        <li>✓ Study groups & collaboration</li>
+                        <li>✓ Offline downloads</li>
+                        <li>✓ Priority support</li>
+                    </ul>
+                    <button class="pricing-btn primary">Select Monthly Plan</button>
+                </div>
+            </div>
+
+            <div class="payment-info">
+                <div class="payment-badge">🔒 Secure M-Pesa payments</div>
+                <p>Easy and secure payment via M-Pesa STK Push</p>
+            </div>
+        </div>
+    </section>
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="section-header">
+            <h2>What Students Are Saying</h2>
+            <p>Join thousands of students who have transformed their exam preparation</p>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">JM</div>
+                    <div class="testimonial-info">
+                        <h4>James Mwangi</h4>
+                        <div class="testimonial-meta">
+                            <span>Computer Science, SCI</span>
+                            <span class="verified-badge">✓ Verified</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    <div class="testimonial-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <p class="testimonial-text">
+                        "Okoa Sem literally saved my semester! I was struggling to find past papers for Data Structures, but with their smart search feature, I found exactly what I needed in seconds. The AI study bot helped me understand complex algorithms. Highly recommend!"
+                    </p>
+                </div>
+                <div class="testimonial-footer">
+                    <span class="testimonial-date">2 weeks ago</span>
+                    <span class="testimonial-helpful">👍 48 found helpful</span>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">SA</div>
+                    <div class="testimonial-info">
+                        <h4>Sarah Akinyi</h4>
+                        <div class="testimonial-meta">
+                            <span>Business Admin, SBE</span>
+                            <span class="verified-badge">✓ Verified</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    <div class="testimonial-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <p class="testimonial-text">
+                        "The monthly plan is worth every shilling! I've accessed papers from 3 years back, and the notes-to-questions feature is a game changer. I upload my lecture notes and get instant practice questions. My grades have improved significantly!"
+                    </p>
+                </div>
+                <div class="testimonial-footer">
+                    <span class="testimonial-date">1 month ago</span>
+                    <span class="testimonial-helpful">👍 62 found helpful</span>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">DK</div>
+                    <div class="testimonial-info">
+                        <h4>David Kamau</h4>
+                        <div class="testimonial-meta">
+                            <span>Civil Engineering, SEA</span>
+                            <span class="verified-badge">✓ Verified</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    <div class="testimonial-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <p class="testimonial-text">
+                        "As an engineering student, finding relevant past papers was always a challenge. Okoa Sem organized everything by department and year. The study groups feature helped me connect with classmates, and we aced our thermodynamics exam together!"
+                    </p>
+                </div>
+                <div class="testimonial-footer">
+                    <span class="testimonial-date">3 weeks ago</span>
+                    <span class="testimonial-helpful">👍 35 found helpful</span>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">MW</div>
+                    <div class="testimonial-info">
+                        <h4>Mary Wanjiru</h4>
+                        <div class="testimonial-meta">
+                            <span>Nursing, SON</span>
+                            <span class="verified-badge">✓ Verified</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    <div class="testimonial-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <p class="testimonial-text">
+                        "The AI chatbot is incredible! I asked questions about pharmacology at 2 AM and got detailed explanations instantly. The offline download feature means I can study anywhere, even without internet. Best KSh 100 I've ever spent!"
+                    </p>
+                </div>
+                <div class="testimonial-footer">
+                    <span class="testimonial-date">5 days ago</span>
+                    <span class="testimonial-helpful">👍 71 found helpful</span>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">BN</div>
+                    <div class="testimonial-info">
+                        <h4>Brian Njuguna</h4>
+                        <div class="testimonial-meta">
+                            <span>Mathematics, SPAS</span>
+                            <span class="verified-badge">✓ Verified</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    <div class="testimonial-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <p class="testimonial-text">
+                        "I love how comprehensive the database is! Found papers dating back 5 years for Calculus III. The topic search helped me practice specific problem types. Passed my exam with an A. Thank you Okoa Sem team!"
+                    </p>
+                </div>
+                <div class="testimonial-footer">
+                    <span class="testimonial-date">1 week ago</span>
+                    <span class="testimonial-helpful">👍 44 found helpful</span>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">GW</div>
+                    <div class="testimonial-info">
+                        <h4>Grace Wambui</h4>
+                        <div class="testimonial-meta">
+                            <span>Education, SED</span>
+                            <span class="verified-badge">✓ Verified</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-content">
+                    <div class="testimonial-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <p class="testimonial-text">
+                        "Simple, affordable, and effective! The M-Pesa payment is so convenient. I can access everything from my phone. The platform is user-friendly and has everything I need for exam prep. All my classmates are now using it!"
+                    </p>
+                </div>
+                <div class="testimonial-footer">
+                    <span class="testimonial-date">2 days ago</span>
+                    <span class="testimonial-helpful">👍 56 found helpful</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="section-header">
+            <h2>Frequently Asked Questions</h2>
+            <p>Everything you need to know about Okoa Sem</p>
+        </div>
+
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-question-text">
+                        <span class="faq-icon">💳</span>
+                        How do I make payments?
+                    </span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Payments are made through <strong>M-Pesa STK Push</strong>. Simply select your preferred plan (Daily at KSh 10 or Monthly at KSh 100), enter your M-Pesa phone number, and you'll receive a prompt on your phone to complete the payment. The process is instant and secure!
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-question-text">
+                        <span class="faq-icon">📚</span>
+                        How many past papers are available?
+                    </span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        We have over <strong>24,000+ past papers</strong> from 8 different schools covering 50+ departments. Papers are organized by year, semester, and course code, making it easy to find exactly what you need for your exam preparation.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-question-text">
+                        <span class="faq-icon">🤖</span>
+                        What can the AI Study Bot do?
+                    </span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Our AI Study Bot provides <strong>instant answers</strong> to your academic questions, helps explain complex concepts, generates practice questions from your notes, and offers personalized study guidance. It's like having a personal tutor available 24/7!
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-question-text">
+                        <span class="faq-icon">📥</span>
+                        Can I download papers for offline use?
+                    </span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes! With a <strong>premium subscription</strong>, you can download unlimited PDFs and access them offline anytime. This is perfect for studying when you don't have internet access or want to save on data.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-question-text">
+                        <span class="faq-icon">🎓</span>
+                        Which schools and departments are covered?
+                    </span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        We cover <strong>8 major schools</strong> including: School of Computing and Informatics (SCI), School of Business and Economics (SBE), School of Engineering and Architecture (SEA), School of Pure and Applied Sciences (SPAS), School of Health Sciences (SHS), School of Nursing (SON), School of Education (SED), and School of Agriculture and Food Sciences (SAFS).
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-question-text">
+                        <span class="faq-icon">📸</span>
+                        How does the Notes to Questions feature work?
+                    </span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Simply <strong>upload an image</strong> of your handwritten or typed study notes, and our AI will automatically generate relevant practice questions to test your understanding of the material. It's a great way to turn passive reading into active learning!
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-question-text">
+                        <span class="faq-icon">👥</span>
+                        Can I study with friends?
+                    </span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Absolutely! You can <strong>create or join study groups</strong>, share questions and resources with your peers, and collaborate on exam preparation. Studying together makes learning more effective and enjoyable!
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-question-text">
+                        <span class="faq-icon">🔄</span>
+                        What happens when my subscription expires?
+                    </span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        When your subscription expires, you'll lose access to premium features like downloading papers, AI chat, and study groups. However, you can <strong>renew anytime</strong> and your account data will be preserved. We'll also send you a reminder before expiration!
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-question-text">
+                        <span class="faq-icon">📱</span>
+                        Is Okoa Sem mobile-friendly?
+                    </span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes! Okoa Sem is <strong>fully responsive</strong> and works perfectly on smartphones, tablets, and computers. You can access all features on any device with an internet connection. Study anywhere, anytime!
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-question-text">
+                        <span class="faq-icon">🔒</span>
+                        Is my personal information secure?
+                    </span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Your security is our priority. We use <strong>Google authentication</strong> for secure sign-in and encrypted M-Pesa payments. We never store your payment information and comply with all data protection regulations.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-cta">
+            <h3>Still have questions?</h3>
+            <p>Our support team is here to help you succeed</p>
+            <a href="#contact" class="contact-btn">
+                Contact Support 💬
+            </a>
+        </div>
+    </section>
+
+    <script>
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all other FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Toggle current item
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+    </script>
+
+    
+
+    <section class="cta-section" id="get-started">
+        <h2>Ready to Ace Your Exams?</h2>
+        <p>Join thousands of students already using Okoa Sem to excel in their studies</p>
+        <a href="signuppage.html" class="btn-secondary">Get Started Free →</a>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Okoa Sem</h3>
+                <p style="color: var(--text-gray);">Your comprehensive platform for accessing past papers and acing your exams.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Features</h3>
+                <ul>
+                    <li><a href="#features">Past Papers</a></li>
+                    <li><a href="#features">Smart Search</a></li>
+                    <li><a href="#features">AI Study Bot</a></li>
+                    <li><a href="#features">Study Groups</a></li>
+                    <li><a href="#pricing">Pricing Plans</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#schools">Browse Schools</a></li>
+                    <li><a href="#">Study Tips</a></li>
+                    <li><a href="#">YouTube Channel</a></li>
+                    <li><a href="#">Downloads</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Okoa Sem. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Past Papers - Okoa Sem</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #C4F82A;
+            --primary-dark: #A8D624;
+            --secondary: #B4A7FF;
+            --dark: #0A0A0A;
+            --dark-card: #1A1A1A;
+            --text-gray: #A0A0A0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--dark);
+            color: white;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--dark);
+            padding: 1.5rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #2A2A2A;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: var(--primary);
+            color: var(--dark);
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .back-btn {
+            background: var(--dark-card);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 2rem 5%;
+            background: linear-gradient(135deg, rgba(196, 248, 42, 0.1), transparent);
+            border-bottom: 1px solid #2A2A2A;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-gray);
+        }
+
+        /* Filters Section */
+        .filters-section {
+            padding: 1.5rem 5%;
+            background: var(--dark-card);
+            border-bottom: 1px solid #2A2A2A;
+            position: sticky;
+            top: 89px;
+            z-index: 999;
+        }
+
+        .filters-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .filters-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr auto;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-gray);
+        }
+
+        .filter-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            background: var(--dark);
+            border: 2px solid #2A2A2A;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--dark);
+            border: 2px solid #2A2A2A;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .view-btn {
+            padding: 0.75rem 1rem;
+            background: var(--dark);
+            border: 2px solid #2A2A2A;
+            border-radius: 8px;
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .view-btn.active {
+            background: var(--primary);
+            color: var(--dark);
+            border-color: var(--primary);
+        }
+
+        .view-btn:hover {
+            border-color: var(--primary);
+        }
+
+        /* Content Section */
+        .content-section {
+            padding: 2rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .results-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #2A2A2A;
+        }
+
+        .results-count {
+            color: var(--text-gray);
+        }
+
+        .results-count strong {
+            color: var(--primary);
+        }
+
+        .sort-select {
+            padding: 0.5rem 1rem;
+            background: var(--dark-card);
+            border: 2px solid #2A2A2A;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* School Groups */
+        .school-group {
+            margin-bottom: 2rem;
+        }
+
+        .school-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: var(--dark-card);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .school-header:hover {
+            background: rgba(196, 248, 42, 0.1);
+        }
+
+        .school-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .school-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(196, 248, 42, 0.15);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .school-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .school-count {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .expand-icon {
+            font-size: 1.5rem;
+            color: var(--text-gray);
+            transition: transform 0.3s;
+        }
+
+        .school-group.collapsed .expand-icon {
+            transform: rotate(-90deg);
+        }
+
+        /* Papers Table */
+        .papers-table {
+            background: var(--dark-card);
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .school-group:not(.collapsed) .papers-table {
+            display: block;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 150px;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            border-bottom: 1px solid #2A2A2A;
+        }
+
+        .paper-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 150px;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #2A2A2A;
+            align-items: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .paper-row:hover {
+            background: rgba(196, 248, 42, 0.05);
+        }
+
+        .paper-row:last-child {
+            border-bottom: none;
+        }
+
+        .paper-name {
+            font-weight: 600;
+        }
+
+        .paper-code {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge.sem-1 { background: rgba(59, 130, 246, 0.2); color: #3B82F6; }
+        .badge.sem-2 { background: rgba(34, 197, 94, 0.2); color: #22C55E; }
+        .badge.sem-3 { background: rgba(251, 191, 36, 0.2); color: #FBBF24; }
+
+        .downloads {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(196, 248, 42, 0.1);
+            border: none;
+            border-radius: 8px;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .icon-btn:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--dark-card);
+            border: 2px solid #2A2A2A;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover,
+        .page-btn.active {
+            background: var(--primary);
+            color: var(--dark);
+            border-color: var(--primary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .filters-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.75rem;
+            }
+
+            .search-box {
+                grid-column: span 2;
+            }
+
+            .table-header,
+            .paper-row {
+                grid-template-columns: 2fr 1fr 1fr 100px;
+            }
+
+            .table-header span:nth-child(4),
+            .paper-row > div:nth-child(4) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filters-row {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box {
+                grid-column: span 1;
+            }
+
+            .table-header {
+                display: none;
+            }
+
+            .paper-row {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+                padding: 1.25rem;
+            }
+
+            .paper-row > div {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .action-buttons {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🎓</div>
+                <span>Okoa Sem</span>
+            </a>
+            <a href="index.html" class="back-btn">← Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Browse Past Papers</h1>
+            <p class="page-subtitle">25,000+ past papers organized by school</p>
+        </div>
+    </div>
+
+    <div class="filters-section">
+        <div class="filters-container">
+            <div class="filters-row">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="filter-input" id="search-input" placeholder="Search by course name, code, or topic...">
+                </div>
+                <select class="filter-select" id="year-filter">
+                    <option value="">All Years</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                </select>
+                <select class="filter-select" id="semester-filter">
+                    <option value="">All Semesters</option>
+                    <option value="1">Semester 1</option>
+                    <option value="2">Semester 2</option>
+                    <option value="3">Semester 3</option>
+                </select>
+                <select class="filter-select" id="school-filter">
+                    <option value="">All Schools</option>
+                    <option value="sci">SCI</option>
+                    <option value="safs">SAFS</option>
+                    <option value="sbe">SBE</option>
+                    <option value="sea">SEA</option>
+                    <option value="sed">SED</option>
+                    <option value="shs">SHS</option>
+                    <option value="son">SON</option>
+                    <option value="spas">SPAS</option>
+                </select>
+                <div class="view-toggle">
+                    <button class="view-btn active">📋</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="results-bar">
+            <div class="results-count">
+                Showing <strong id="results-count">25,847</strong> past papers
+            </div>
+            <select class="sort-select" id="sort-select">
+                <option value="recent">Most Recent</option>
+                <option value="popular">Most Downloaded</option>
+                <option value="name">Course Name (A-Z)</option>
+            </select>
+        </div>
+
+        <div id="schools-container">
+            <!-- Schools will be rendered here -->
+        </div>
+
+        <div class="pagination">
+            <button class="page-btn">←</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">...</button>
+            <button class="page-btn">10</button>
+            <button class="page-btn">→</button>
+        </div>
+    </div>
+
+    <script>
+        const schools = [
+            {
+                id: 'sci',
+                name: 'School of Computing and Informatics',
+                icon: '💻',
+                papers: [
+                    { name: 'Data Structures and Algorithms', code: 'CSC 201', year: 2024, semester: 1, pages: 8, downloads: 3421 },
+                    { name: 'Database Management Systems', code: 'CSC 301', year: 2024, semester: 1, pages: 10, downloads: 2891 },
+                    { name: 'Computer Networks', code: 'CSC 401', year: 2023, semester: 2, pages: 12, downloads: 2567 },
+                    { name: 'Operating Systems', code: 'CSC 302', year: 2024, semester: 1, pages: 9, downloads: 2134 },
+                    { name: 'Software Engineering', code: 'CSC 303', year: 2023, semester: 2, pages: 11, downloads: 1987 },
+                ]
+            },
+            {
+                id: 'sbe',
+                name: 'School of Business and Economics',
+                icon: '💼',
+                papers: [
+                    { name: 'Financial Accounting I', code: 'ACC 101', year: 2024, semester: 1, pages: 6, downloads: 4231 },
+                    { name: 'Marketing Management', code: 'MKT 201', year: 2024, semester: 2, pages: 7, downloads: 3892 },
+                    { name: 'Business Statistics', code: 'BUS 202', year: 2023, semester: 1, pages: 8, downloads: 3421 },
+                    { name: 'Microeconomics', code: 'ECO 101', year: 2024, semester: 1, pages: 9, downloads: 3156 },
+                    { name: 'Strategic Management', code: 'MGT 401', year: 2023, semester: 2, pages: 10, downloads: 2789 },
+                ]
+            },
+            {
+                id: 'sea',
+                name: 'School of Engineering and Architecture',
+                icon: '🏗️',
+                papers: [
+                    { name: 'Structural Engineering', code: 'CIV 301', year: 2024, semester: 1, pages: 10, downloads: 2134 },
+                    { name: 'Thermodynamics', code: 'MEC 201', year: 2023, semester: 2, pages: 12, downloads: 1987 },
+                    { name: 'Engineering Mathematics III', code: 'ENG 303', year: 2024, semester: 1, pages: 14, downloads: 1876 },
+                    { name: 'Fluid Mechanics', code: 'MEC 202', year: 2023, semester: 1, pages: 11, downloads: 1654 },
+                    { name: 'Electrical Circuits', code: 'ELE 201', year: 2024, semester: 2, pages: 9, downloads: 1543 },
+                ]
+            },
+            {
+                id: 'spas',
+                name: 'School of Pure and Applied Sciences',
+                icon: '🔬',
+                papers: [
+                    { name: 'Organic Chemistry II', code: 'CHE 202', year: 2024, semester: 1, pages: 12, downloads: 3876 },
+                    { name: 'Calculus III', code: 'MAT 301', year: 2023, semester: 2, pages: 10, downloads: 3542 },
+                    { name: 'Molecular Biology', code: 'BIO 301', year: 2024, semester: 1, pages: 14, downloads: 3234 },
+                    { name: 'Quantum Physics', code: 'PHY 401', year: 2023, semester: 2, pages: 13, downloads: 2987 },
+                    { name: 'Analytical Chemistry', code: 'CHE 303', year: 2024, semester: 1, pages: 11, downloads: 2765 },
+                ]
+            },
+            {
+                id: 'son',
+                name: 'School of Nursing',
+                icon: '🏥',
+                papers: [
+                    { name: 'Anatomy and Physiology', code: 'NUR 101', year: 2024, semester: 1, pages: 15, downloads: 4567 },
+                    { name: 'Pharmacology', code: 'NUR 202', year: 2023, semester: 2, pages: 13, downloads: 4123 },
+                    { name: 'Medical-Surgical Nursing', code: 'NUR 301', year: 2024, semester: 1, pages: 16, downloads: 3897 },
+                    { name: 'Pediatric Nursing', code: 'NUR 303', year: 2023, semester: 1, pages: 12, downloads: 3456 },
+                    { name: 'Community Health Nursing', code: 'NUR 204', year: 2024, semester: 2, pages: 10, downloads: 3234 },
+                ]
+            },
+            {
+                id: 'sed',
+                name: 'School of Education',
+                icon: '📚',
+                papers: [
+                    { name: 'Educational Psychology', code: 'EDU 203', year: 2024, semester: 1, pages: 7, downloads: 2876 },
+                    { name: 'Curriculum Development', code: 'EDU 301', year: 2023, semester: 2, pages: 9, downloads: 2543 },
+                    { name: 'Teaching Methods', code: 'EDU 202', year: 2024, semester: 1, pages: 8, downloads: 2398 },
+                    { name: 'Educational Assessment', code: 'EDU 304', year: 2023, semester: 1, pages: 10, downloads: 2187 },
+                    { name: 'Child Development', code: 'EDU 201', year: 2024, semester: 2, pages: 11, downloads: 2045 },
+                ]
+            },
+            {
+                id: 'shs',
+                name: 'School of Health Sciences',
+                icon: '⚕️',
+                papers: [
+                    { name: 'Public Health Management', code: 'HPM 301', year: 2024, semester: 1, pages: 11, downloads: 2987 },
+                    { name: 'Epidemiology', code: 'HPM 202', year: 2023, semester: 2, pages: 13, downloads: 2765 },
+                    { name: 'Health Policy', code: 'HPM 303', year: 2024, semester: 1, pages: 9, downloads: 2543 },
+                    { name: 'Biostatistics', code: 'HPM 201', year: 2023, semester: 1, pages: 12, downloads: 2398 },
+                    { name: 'Environmental Health', code: 'HPM 204', year: 2024, semester: 2, pages: 10, downloads: 2187 },
+                ]
+            },
+            {
+                id: 'safs',
+                name: 'School of Agriculture and Food Sciences',
+                icon: '🌾',
+                papers: [
+                    { name: 'Crop Production', code: 'AGR 202', year: 2024, semester: 1, pages: 8, downloads: 1876 },
+                    { name: 'Soil Science', code: 'AGR 201', year: 2023, semester: 2, pages: 10, downloads: 1654 },
+                    { name: 'Agricultural Economics', code: 'AGR 301', year: 2024, semester: 1, pages: 9, downloads: 1543 },
+                    { name: 'Animal Husbandry', code: 'AGR 203', year: 2023, semester: 1, pages: 11, downloads: 1432 },
+                    { name: 'Food Technology', code: 'AGR 302', year: 2024, semester: 2, pages: 12, downloads: 1321 },
+                ]
+            }
+        ];
+
+        function renderSchools() {
+            const container = document.getElementById('schools-container');
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const yearFilter = document.getElementById('year-filter').value;
+            const semesterFilter = document.getElementById('semester-filter').value;
+            const schoolFilter = document.getElementById('school-filter').value;
+
+            let filteredSchools = schools;
+            
+            if (schoolFilter) {
+                filteredSchools = schools.filter(s => s.id === schoolFilter);
+            }
+
+            let totalPapers = 0;
+
+            const html = filteredSchools.map(school => {
+                let papers = school.papers.filter(paper => {
+                    const matchesSearch = searchTerm === '' || 
+                        paper.name.toLowerCase().includes(searchTerm) ||
+                        paper.code.toLowerCase().includes(searchTerm);
+                    const matchesYear = yearFilter === '' || paper.year.toString() === yearFilter;
+                    const matchesSemester = semesterFilter === '' || paper.semester.toString() === semesterFilter;
+                    return matchesSearch && matchesYear && matchesSemester;
+                });
+
+                totalPapers += papers.length;
+
+                if (papers.length === 0) return '';
+
+                return `
+                    <div class="school-group" data-school="${school.id}">
+                        <div class="school-header" onclick="toggleSchool('${school.id}')">
+                            <div class="school-info">
+                                <div class="school-icon">${school.icon}</div>
+                                <div class="school-details">
+                                    <h3>${school.name}</h3>
+                                    <div class="school-count">${papers.length} past papers</div>
+                                </div>
+                            </div>
+                            <div class="expand-icon">▼</div>
+                        </div>
+                        <div class="papers-table">
+                            <div class="table-header">
+                                <span>COURSE</span>
+                                <span>YEAR</span>
+                                <span>SEMESTER</span>
+                                <span>PAGES</span>
+                                <span>DOWNLOADS</span>
+                                <span>ACTIONS</span>
+                            </div>
+                            ${papers.map(paper => `
+                                <div class="paper-row">
+                                    <div>
+                                        <div class="paper-name">${paper.name}</div>
+                                        <div class="paper-code">${paper.code}</div>
+                                    </div>
+                                    <div>${paper.year}</div>
+                                    <div><span class="badge sem-${paper.semester}">Sem ${paper.semester}</span></div>
+                                    <div>${paper.pages} pages</div>
+                                    <div class="downloads">${paper.downloads.toLocaleString()}</div>
+                                    <div class="action-buttons">
+                                        <button class="icon-btn" title="Preview">👁️</button>
+                                        <button class="icon-btn" title="Download">⬇️</button>
+                                        <button class="icon-btn" title="Share">📤</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = html || `
+                <div class="empty-state">
+                    <div class="empty-icon">📭</div>
+                    <h3>No papers found</h3>
+                    <p>Try adjusting your filters</p>
+                </div>
+            `;
+
+            document.getElementById('results-count').textContent = totalPapers.toLocaleString();
+        }
+
+        function toggleSchool(schoolId) {
+            const group = document.querySelector(`[data-school="${schoolId}"]`);
+            group.classList.toggle('collapsed');
+        }
+
+        // Event listeners
+        document.getElementById('search-input').addEventListener('input', renderSchools);
+        document.getElementById('year-filter').addEventListener('change', renderSchools);
+        document.getElementById('semester-filter').addEventListener('change', renderSchools);
+        document.getElementById('school-filter').addEventListener('change', renderSchools);
+
+        // Initialize
+        renderSchools();
+    </script>
+</body>
+</html>

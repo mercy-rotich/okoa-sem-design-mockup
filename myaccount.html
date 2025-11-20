@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - Okoa Sem</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #C4F82A;
+            --primary-dark: #A8D624;
+            --secondary: #B4A7FF;
+            --dark: #0A0A0A;
+            --dark-card: #1A1A1A;
+            --dark-section: #0F0F0F;
+            --text-gray: #A0A0A0;
+            --success: #22C55E;
+            --warning: #FFA76B;
+            --info: #3B82F6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--dark);
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--dark);
+            padding: 1.5rem 5%;
+            border-bottom: 1px solid #2A2A2A;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: var(--primary);
+            color: var(--dark);
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        /* Main Container */
+        .account-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+
+        /* Profile Header Card - Compact */
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-image-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+        }
+
+        .verified-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 32px;
+            height: 32px;
+            background: var(--success);
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-email {
+            color: var(--dark);
+            opacity: 0.8;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .profile-meta {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .verified-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(34, 197, 94, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Two Column Layout */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Info Card */
+        .info-card {
+            background: var(--dark-card);
+            border: 2px solid #2A2A2A;
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #2A2A2A;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .info-row:first-child {
+            padding-top: 0;
+        }
+
+        .info-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .info-icon.user { background: rgba(196, 248, 42, 0.15); color: var(--primary); }
+        .info-icon.email { background: rgba(180, 167, 255, 0.15); color: var(--secondary); }
+        .info-icon.shield { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+        .info-icon.calendar { background: rgba(59, 130, 246, 0.15); color: var(--info); }
+        .info-icon.clock { background: rgba(255, 167, 107, 0.15); color: var(--warning); }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-label {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            color: white;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        /* Subscription Card */
+        .subscription-card {
+            background: var(--dark-card);
+            border: 2px solid #2A2A2A;
+            border-radius: 20px;
+            padding: 2rem;
+            height: fit-content;
+        }
+
+        .sub-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sub-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(196, 248, 42, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .sub-info {
+            flex: 1;
+        }
+
+        .sub-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .sub-status {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        .subscription-alert {
+            background: rgba(255, 167, 107, 0.1);
+            border: 1px solid rgba(255, 167, 107, 0.3);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .alert-icon {
+            color: var(--warning);
+            font-size: 1.25rem;
+        }
+
+        .alert-text {
+            color: var(--warning);
+            font-size: 0.95rem;
+        }
+
+        .history-btn {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(196, 248, 42, 0.1);
+            border: 1px solid rgba(196, 248, 42, 0.3);
+            border-radius: 12px;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .history-btn:hover {
+            background: rgba(196, 248, 42, 0.2);
+        }
+
+        /* Payment Card - Full Width */
+        .payment-section {
+            margin-top: 2rem;
+        }
+
+        .payment-card {
+            background: linear-gradient(135deg, #2A2550 0%, #1A1A3A 100%);
+            border: 2px solid #3A3560;
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .payment-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .payment-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(180, 167, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .payment-title {
+            flex: 1;
+        }
+
+        .payment-title h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .payment-subtitle {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .plan-option {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #3A3560;
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .plan-option:hover {
+            border-color: var(--primary);
+            background: rgba(196, 248, 42, 0.05);
+            transform: translateY(-4px);
+        }
+
+        .plan-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .plan-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-price {
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .payment-secure {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #3A3560;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .account-container {
+                padding: 1rem 5%;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem 1.5rem;
+            }
+
+            .profile-meta {
+                justify-content: center;
+            }
+
+            .profile-name {
+                font-size: 1.75rem;
+            }
+
+            .info-card,
+            .subscription-card,
+            .payment-card {
+                padding: 1.5rem;
+            }
+
+            .plans-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🎓</div>
+                <span>Okoa Sem</span>
+            </a>
+            <div class="nav-right">
+                <a href="index.html" class="nav-btn">← Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="account-container">
+        <!-- Profile Header - Horizontal Layout -->
+        <div class="profile-header">
+            <div class="profile-image-container">
+                <img src="https://via.placeholder.com/120" alt="Profile" class="profile-image">
+                <div class="verified-badge">✓</div>
+            </div>
+            <div class="profile-info">
+                <h1 class="profile-name">Mercy Cherotich</h1>
+                <p class="profile-email">cherotichm182@gmail.com</p>
+                <div class="profile-meta">
+                    <div class="verified-status">
+                        <span>✓</span>
+                        <span>Verified Account</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>📅</span>
+                        <span>Member since Sep 12, 2025</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>🕐</span>
+                        <span>Active 4 minutes ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Two Column Grid: Account Details + Subscription -->
+        <div class="content-grid">
+            <!-- Left Column: Account Details -->
+            <div>
+                <div class="section-header">
+                    <span class="section-icon">ℹ️</span>
+                    <h2>Account Details</h2>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-row">
+                        <div class="info-icon user">👤</div>
+                        <div class="info-content">
+                            <div class="info-label">Full Name</div>
+                            <div class="info-value">Mercy Cherotich</div>
+                        </div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-icon email">📧</div>
+                        <div class="info-content">
+                            <div class="info-label">Email Address</div>
+                            <div class="info-value">cherotichm182@gmail.com</div>
+                        </div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-icon shield">🛡️</div>
+                        <div class="info-content">
+                            <div class="info-label">Account Status</div>
+                            <div class="info-value">✓ Verified</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Subscription Status -->
+            <div>
+                <div class="section-header">
+                    <span class="section-icon">💻</span>
+                    <h2>Subscription</h2>
+                </div>
+
+                <div class="subscription-card">
+                    <div class="sub-header">
+                        <div class="sub-icon">💎</div>
+                        <div class="sub-info">
+                            <div class="sub-title">Current Plan</div>
+                            <div class="sub-status">No Active Plan</div>
+                        </div>
+                    </div>
+
+                    <div class="subscription-alert">
+                        <span class="alert-icon">⚠️</span>
+                        <span class="alert-text">Subscribe to access premium features</span>
+                    </div>
+
+                    <button class="history-btn">
+                        <span>📜</span>
+                        <span>View History</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Section - Full Width -->
+        <div class="payment-section">
+            <div class="section-header">
+                <span class="section-icon">💳</span>
+                <h2>Choose Your Plan</h2>
+            </div>
+
+            <div class="payment-card">
+                <div class="payment-header">
+                    <div class="payment-icon">💳</div>
+                    <div class="payment-title">
+                        <h3>Subscribe Now</h3>
+                        <p class="payment-subtitle">Select a plan and pay securely via M-Pesa</p>
+                    </div>
+                </div>
+
+                <div class="plans-grid">
+                    <div class="plan-option" onclick="selectPlan('daily')">
+                        <div class="plan-icon">📅</div>
+                        <div class="plan-name">Daily Plan</div>
+                        <div class="plan-price">KSh 10</div>
+                    </div>
+
+                    <div class="plan-option" onclick="selectPlan('monthly')">
+                        <div class="plan-icon">📆</div>
+                        <div class="plan-name">Monthly Plan</div>
+                        <div class="plan-price">KSh 100</div>
+                    </div>
+                </div>
+
+                <div class="payment-secure">
+                    <span>🔒</span>
+                    <span>Secure M-Pesa payments powered by Safaricom</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectPlan(planType) {
+            const planNames = {
+                'daily': 'Daily Plan (KSh 10)',
+                'monthly': 'Monthly Plan (KSh 100)'
+            };
+
+            if (confirm(`Subscribe to ${planNames[planType]}?\n\nYou will be prompted to complete payment via M-Pesa.`)) {
+                alert('M-Pesa Payment Flow:\n\n1. Enter your M-Pesa phone number\n2. Receive STK push notification\n3. Enter your M-Pesa PIN\n4. Confirm payment\n\nYou will be redirected to the payment page...');
+                
+                // In production, redirect to payment page
+                // window.location.href = '/payment?plan=' + planType;
+            }
+        }
+
+        // Add smooth scroll animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.info-card, .subscription-card, .payment-card').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'all 0.6s ease-out';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

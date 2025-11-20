@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Okoa Sem</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #C4F82A;
+            --primary-dark: #A8D624;
+            --secondary: #B4A7FF;
+            --dark: #0A0A0A;
+            --dark-card: #1A1A1A;
+            --text-gray: #A0A0A0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--dark);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--dark);
+            padding: 1.5rem 5%;
+            border-bottom: 1px solid #2A2A2A;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: var(--primary);
+            color: var(--dark);
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .account-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--dark-card);
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-gray);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .account-icon:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Sign Up Container */
+        .signup-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 5%;
+            background: radial-gradient(circle at 50% 20%, rgba(196, 248, 42, 0.08), transparent 60%);
+        }
+
+        .signup-card {
+            background: var(--dark-card);
+            border: 2px solid #2A2A2A;
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            max-width: 480px;
+            width: 100%;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .signup-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0); 
+            }
+            50% { 
+                transform: translateY(-10px); 
+            }
+        }
+
+        .signup-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-text {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .signup-header p {
+            color: var(--text-gray);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Google Sign In Button */
+        .google-btn {
+            width: 100%;
+            padding: 1.25rem;
+            background: white;
+            color: var(--dark);
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: all 0.3s;
+            margin-bottom: 1.5rem;
+        }
+
+        .google-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+        }
+
+        .google-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(45deg, #4285F4, #EA4335, #FBBC05, #34A853);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-icon {
+            color: #3B82F6;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .info-box p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Feature Badges */
+        .feature-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-badge {
+            background: rgba(196, 248, 42, 0.1);
+            border: 1px solid rgba(196, 248, 42, 0.3);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Terms */
+        .terms {
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .terms a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .terms a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* Back Link */
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-link a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .back-link a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .signup-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .signup-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .signup-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 2rem;
+            }
+
+            .google-btn {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🎓</div>
+                <span>Okoa Sem</span>
+            </a>
+            <a href="#" class="account-icon" title="My Account">
+                👤
+            </a>
+        </div>
+    </nav>
+
+    <div class="signup-container">
+        <div class="signup-card">
+            <div class="signup-header">
+                <div class="signup-icon">🎓</div>
+                <h1><span class="welcome-text">Welcome Back!</span></h1>
+                <p>Sign in to continue your academic journey</p>
+            </div>
+
+            <button class="google-btn" onclick="signInWithGoogle()">
+                <div class="google-icon">G</div>
+                Continue with Google
+            </button>
+
+            <div class="info-box">
+                <span class="info-icon">ℹ️</span>
+                <p>Sign in with your Google account to access all features</p>
+            </div>
+
+            <div class="feature-badges">
+                <div class="feature-badge">
+                    📚 Past Papers
+                </div>
+                <div class="feature-badge">
+                    🔍 Smart Search
+                </div>
+                <div class="feature-badge">
+                    👥 Study Groups
+                </div>
+            </div>
+
+            <div class="terms">
+                By signing in, you agree to our 
+                <a href="#">Terms of Service</a> and 
+                <a href="#">Privacy Policy</a>
+            </div>
+
+            <div class="back-link">
+                <a href="index.html">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function signInWithGoogle() {
+            // Placeholder for Google Sign-In functionality
+            alert('Google Sign-In would be implemented here.\n\nIn a real application, this would:\n1. Open Google OAuth flow\n2. Authenticate the user\n3. Create/update user profile\n4. Redirect to dashboard');
+            
+            // In production, you would use Google Identity Services:
+            // google.accounts.id.initialize({...});
+            // google.accounts.id.prompt();
+        }
+
+        // Add animation on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const card = document.querySelector('.signup-card');
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s ease-out';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Study Bot - Okoa Sem</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #C4F82A;
+            --primary-dark: #A8D624;
+            --secondary: #B4A7FF;
+            --dark: #0A0A0A;
+            --dark-card: #1A1A1A;
+            --sidebar-bg: #0F0F0F;
+            --text-gray: #A0A0A0;
+            --message-bg: #2A2A2A;
+            --success-green: #22C55E;
+            --error-red: #EF4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--dark);
+            padding: 1rem 5%;
+            border-bottom: 1px solid #2A2A2A;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: var(--primary);
+            color: var(--dark);
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .back-button {
+            background: transparent;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #2A2A2A;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            height: calc(100vh - 80px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid #2A2A2A;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #2A2A2A;
+        }
+
+        .new-chat-btn {
+            width: 100%;
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            padding: 0.875rem 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .new-chat-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .chat-history::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-history::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-history::-webkit-scrollbar-thumb {
+            background: #2A2A2A;
+            border-radius: 3px;
+        }
+
+        .history-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .history-label {
+            color: var(--text-gray);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            padding: 0 0.5rem;
+        }
+
+        .history-item {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .history-item:hover {
+            background: var(--dark-card);
+        }
+
+        .history-item.active {
+            background: var(--dark-card);
+            border-left: 3px solid var(--primary);
+        }
+
+        .history-icon {
+            font-size: 1rem;
+        }
+
+        .history-text {
+            flex: 1;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-time {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+        }
+
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Subscription Banner */
+        .subscription-banner {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.1) 100%);
+            border-bottom: 1px solid rgba(255, 193, 7, 0.3);
+            padding: 0.875rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .banner-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .warning-icon {
+            font-size: 1.25rem;
+        }
+
+        .banner-text {
+            color: #FFC107;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .subscribe-btn {
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .subscribe-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #2A2A2A;
+            border-radius: 4px;
+        }
+
+        /* Messages */
+        .message {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            max-width: 900px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.25rem;
+        }
+
+        .message-avatar.bot {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .message-avatar.user {
+            background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+            color: white;
+        }
+
+        .message-content {
+            background: var(--message-bg);
+            padding: 1rem 1.25rem;
+            border-radius: 18px;
+            max-width: 600px;
+        }
+
+        .message.user .message-content {
+            background: #3A4A3A;
+            border-radius: 18px 18px 4px 18px;
+        }
+
+        .message.bot .message-content {
+            border-radius: 4px 18px 18px 18px;
+        }
+
+        .message-text {
+            line-height: 1.6;
+            color: white;
+            font-size: 0.95rem;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: none;
+            padding: 1rem 1.25rem;
+            background: var(--message-bg);
+            border-radius: 18px;
+            width: fit-content;
+        }
+
+        .typing-indicator.active {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--text-gray);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* Input Area */
+        .input-container {
+            padding: 1.5rem 2rem 2rem;
+            background: var(--dark);
+            border-top: 1px solid #2A2A2A;
+        }
+
+        .input-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: var(--dark-card);
+            border: 2px solid #2A2A2A;
+            border-radius: 24px;
+            padding: 1rem 1.5rem;
+            color: white;
+            font-size: 1rem;
+            resize: none;
+            outline: none;
+            transition: border-color 0.3s;
+            font-family: inherit;
+            max-height: 150px;
+            min-height: 50px;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-gray);
+        }
+
+        .send-btn {
+            background: var(--primary);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            background: #2A2A2A;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .send-icon {
+            font-size: 1.25rem;
+            color: var(--dark);
+        }
+
+        /* Subscription Modal */
+        .subscription-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .subscription-modal.active {
+            display: flex;
+        }
+
+        .subscription-content {
+            background: var(--dark);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Subscription Header */
+        .subscription-header {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid #2A2A2A;
+            position: relative;
+        }
+
+        .modal-back-btn {
+            position: absolute;
+            left: 1.5rem;
+            top: 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .modal-back-btn:hover {
+            color: var(--primary);
+        }
+
+        .subscription-header h2 {
+            font-size: 1.75rem;
+            margin-bottom: 0;
+        }
+
+        /* Subscription Body */
+        .subscription-body {
+            padding: 2rem;
+        }
+
+        /* Premium Banner */
+        .premium-banner {
+            background: linear-gradient(135deg, rgba(196, 248, 42, 0.15) 0%, rgba(180, 167, 255, 0.15) 100%);
+            border: 2px solid rgba(196, 248, 42, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .premium-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: var(--dark);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .premium-text h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .premium-text p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Plan Selection */
+        .plan-selection {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .plan-card {
+            background: var(--dark-card);
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .plan-card:hover {
+            border-color: var(--primary);
+        }
+
+        .plan-card.selected {
+            border-color: var(--primary);
+            background: rgba(196, 248, 42, 0.05);
+        }
+
+        .plan-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .plan-details {
+            flex: 1;
+        }
+
+        .plan-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .plan-duration {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .plan-price {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .price-amount {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .plan-radio {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #2A2A2A;
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .plan-card.selected .plan-radio {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+
+        .plan-card.selected .plan-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: var(--dark);
+            border-radius: 50%;
+        }
+
+        .selected-badge {
+            background: var(--primary);
+            color: var(--dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        /* Phone Input */
+        .phone-input-section {
+            margin-bottom: 2rem;
+        }
+
+        .phone-input-wrapper {
+            position: relative;
+        }
+
+        .phone-input {
+            width: 100%;
+            background: var(--dark-card);
+            border: 2px solid #2A2A2A;
+            border-radius: 10px;
+            padding: 1rem 1rem 1rem 4.5rem;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .phone-input:focus {
+            border-color: var(--primary);
+        }
+
+        .phone-input.error {
+            border-color: var(--error-red);
+        }
+
+        .phone-prefix {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .error-message {
+            color: var(--error-red);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-message {
+            color: #3B82F6;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: start;
+            gap: 0.5rem;
+        }
+
+        /* Payment Summary */
+        .payment-summary {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #2A2A2A;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #2A2A2A;
+        }
+
+        .summary-icon {
+            font-size: 1.25rem;
+        }
+
+        .summary-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: var(--text-gray);
+        }
+
+        .summary-row:last-child {
+            margin-bottom: 0;
+            padding-top: 1rem;
+            border-top: 1px solid #2A2A2A;
+        }
+
+        .summary-label {
+            font-size: 0.95rem;
+        }
+
+        .summary-value {
+            font-size: 0.95rem;
+            color: white;
+        }
+
+        .summary-row.total .summary-label {
+            font-weight: 600;
+            color: white;
+        }
+
+        .summary-row.total .summary-value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Pay Button */
+        .pay-button {
+            width: 100%;
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .pay-button:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .pay-button:disabled {
+            background: #2A2A2A;
+            color: var(--text-gray);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        /* Processing Modal */
+        .processing-container {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .processing-spinner {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .spinner-ring {
+            width: 100%;
+            height: 100%;
+            border: 4px solid rgba(59, 130, 246, 0.2);
+            border-top: 4px solid #3B82F6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .processing-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #3B82F6;
+        }
+
+        .processing-text {
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+        }
+
+        .processing-progress {
+            width: 100%;
+            height: 4px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3B82F6 0%, #60A5FA 100%);
+            animation: progress 2s ease-in-out;
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 70%; }
+        }
+
+        .payment-details {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            color: var(--text-gray);
+        }
+
+        .detail-value {
+            color: white;
+            font-weight: 600;
+        }
+
+        .cancel-button {
+            width: 100%;
+            background: transparent;
+            color: var(--error-red);
+            border: 2px solid var(--error-red);
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cancel-button:hover {
+            background: var(--error-red);
+            color: white;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 80px;
+                height: calc(100vh - 80px);
+                z-index: 150;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .chat-container {
+                padding: 1rem;
+            }
+
+            .input-container {
+                padding: 1rem;
+            }
+
+            .subscription-banner {
+                padding: 0.75rem 1rem;
+                flex-wrap: wrap;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .subscription-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🎓</div>
+                <span>Okoa Sem</span>
+            </a>
+            <a href="index.html" class="back-button">
+                ← Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="new-chat-btn" onclick="newChat()">
+                    <span>➕</span>
+                    <span>New Chat</span>
+                </button>
+            </div>
+
+            <div class="chat-history">
+                <div class="history-section">
+                    <div class="history-label">Today</div>
+                    <div class="history-item active">
+                        <span class="history-icon">💬</span>
+                        <span class="history-text">Hey</span>
+                        <span class="history-time">19:43</span>
+                    </div>
+                    <div class="history-item">
+                        <span class="history-icon">💬</span>
+                        <span class="history-text">Help with calculus</span>
+                        <span class="history-time">14:20</span>
+                    </div>
+                </div>
+
+                <div class="history-section">
+                    <div class="history-label">Yesterday</div>
+                    <div class="history-item">
+                        <span class="history-icon">💬</span>
+                        <span class="history-text">Physics homework</span>
+                        <span class="history-time">16:45</span>
+                    </div>
+                    <div class="history-item">
+                        <span class="history-icon">💬</span>
+                        <span class="history-text">Essay brainstorming</span>
+                        <span class="history-time">10:30</span>
+                    </div>
+                </div>
+
+                <div class="history-section">
+                    <div class="history-label">Last 7 Days</div>
+                    <div class="history-item">
+                        <span class="history-icon">💬</span>
+                        <span class="history-text">Chemistry concepts</span>
+                        <span class="history-time">Mon</span>
+                    </div>
+                    <div class="history-item">
+                        <span class="history-icon">💬</span>
+                        <span class="history-text">Programming help</span>
+                        <span class="history-time">Sun</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Chat Area -->
+        <main class="chat-area">
+            <!-- Subscription Banner -->
+            <div class="subscription-banner">
+                <div class="banner-left">
+                    <span class="warning-icon">⚠️</span>
+                    <span class="banner-text">No active subscription</span>
+                </div>
+                <button class="subscribe-btn" onclick="openSubscriptionModal()">Subscribe</button>
+            </div>
+
+            <!-- Chat Container -->
+            <div class="chat-container" id="chatContainer">
+                <!-- Bot Welcome Message -->
+                <div class="message bot">
+                    <div class="message-avatar bot">✨</div>
+                    <div class="message-content">
+                        <div class="message-text">
+                            Hey there! That's a lot of 'Hey's! You definitely have my attention. 😊<br><br>
+                            Now that I'm here, how can I help you with your studies today?<br><br>
+                            Are you working on a tricky math problem, trying to understand a concept from science class, or maybe brainstorming for an essay?<br><br>
+                            Just let me know what's on your mind, and we can tackle it together
+                        </div>
+                        <div class="message-time">19:44 📋</div>
+                    </div>
+                </div>
+
+                <!-- User Message -->
+                <div class="message user">
+                    <div class="message-avatar user">👤</div>
+                    <div class="message-content">
+                        <div class="message-text">Hey</div>
+                        <div class="message-time">19:43</div>
+                    </div>
+                </div>
+
+                <!-- Typing Indicator -->
+                <div class="message bot">
+                    <div class="message-avatar bot">✨</div>
+                    <div class="typing-indicator" id="typingIndicator">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <textarea 
+                        class="chat-input" 
+                        id="chatInput" 
+                        placeholder="Ask me anything..." 
+                        rows="1"
+                        onkeydown="handleKeyPress(event)"
+                    ></textarea>
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                        <span class="send-icon">➤</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Subscription Modal -->
+    <div class="subscription-modal" id="subscriptionModal">
+        <div class="subscription-content">
+            <!-- Step 1: Plan Selection -->
+            <div id="stepPlanSelection" class="subscription-step">
+                <div class="subscription-header">
+                    <button class="modal-back-btn" onclick="closeSubscriptionModal()">←</button>
+                    <h2>Subscribe</h2>
+                </div>
+                
+                <div class="subscription-body">
+                    <div class="premium-banner">
+                        <div class="premium-icon">🎖️</div>
+                        <div class="premium-text">
+                            <h3>Unlock Premium Access</h3>
+                            <p>Get unlimited access to all past papers and premium study materials</p>
+                        </div>
+                    </div>
+
+                    <div class="plan-selection">
+                        <div class="section-title">Select Plan</div>
+                        
+                        <div class="plan-card" onclick="selectPlan('daily')">
+                            <div class="plan-icon">📅</div>
+                            <div class="plan-details">
+                                <div class="plan-name">Daily Plan</div>
+                                <div class="plan-duration">24 hours access</div>
+                            </div>
+                            <div class="plan-price">
+                                <span class="price-amount">KSh 10</span>
+                            </div>
+                            <div class="plan-radio" id="dailyRadio"></div>
+                        </div>
+
+                        <div class="plan-card selected" onclick="selectPlan('monthly')">
+                            <div class="plan-icon">📆</div>
+                            <div class="plan-details">
+                                <div class="plan-name">Monthly Plan</div>
+                                <div class="plan-duration">30 days access</div>
+                            </div>
+                            <div class="plan-price">
+                                <span class="price-amount">KSh 100</span>
+                            </div>
+                            <span class="selected-badge">Selected</span>
+                            <div class="plan-radio" id="monthlyRadio"></div>
+                        </div>
+                    </div>
+
+                    <button class="pay-button" onclick="goToPhoneInput()">
+                        Continue
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Phone Number Input -->
+            <div id="stepPhoneInput" class="subscription-step" style="display: none;">
+                <div class="subscription-header">
+                    <button class="modal-back-btn" onclick="goToPlanSelection()">←</button>
+                    <h2>Subscribe</h2>
+                </div>
+                
+                <div class="subscription-body">
+                    <div class="plan-card selected" style="margin-bottom: 2rem;">
+                        <div class="plan-icon">📆</div>
+                        <div class="plan-details">
+                            <div class="plan-name" id="selectedPlanName">Monthly Plan</div>
+                            <div class="plan-duration" id="selectedPlanDuration">30 days access</div>
+                        </div>
+                        <div class="plan-price">
+                            <span class="price-amount" id="selectedPlanPrice">KSh 100</span>
+                        </div>
+                        <span class="selected-badge">Selected</span>
+                    </div>
+
+                    <div class="phone-input-section">
+                        <div class="section-title">M-Pesa Phone Number</div>
+                        <div class="phone-input-wrapper">
+                            <div class="phone-prefix">
+                                🇰🇪 +254
+                            </div>
+                            <input 
+                                type="tel" 
+                                class="phone-input" 
+                                id="phoneInput" 
+                                placeholder="712345678"
+                                maxlength="9"
+                                oninput="validatePhone()"
+                            >
+                        </div>
+                        <div class="error-message" id="phoneError" style="display: none;">
+                            Phone number is required
+                        </div>
+                        <div class="info-message">
+                            <span>ℹ️</span>
+                            <span>Enter the M-Pesa number to receive payment prompt</span>
+                        </div>
+                    </div>
+
+                    <div class="payment-summary">
+                        <div class="summary-header">
+                            <span class="summary-icon">💳</span>
+                            <span class="summary-title">Payment Summary</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Plan</span>
+                            <span class="summary-value" id="summaryPlan">Monthly Access</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Duration</span>
+                            <span class="summary-value" id="summaryDuration">30 Days</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Phone Number</span>
+                            <span class="summary-value" id="summaryPhone">Not entered</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span class="summary-label">Total Amount</span>
+                            <span class="summary-value" id="summaryTotal">KSh 100</span>
+                        </div>
+                    </div>
+
+                    <button class="pay-button" id="payButton" onclick="initiatePayment()" disabled>
+                        💳 Pay <span id="payAmount">KSh 100</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Processing Payment -->
+            <div id="stepProcessing" class="subscription-step" style="display: none;">
+                <div class="subscription-header">
+                    <h2>Subscribe</h2>
+                </div>
+                
+                <div class="processing-container">
+                    <div class="processing-spinner">
+                        <div class="spinner-ring"></div>
+                    </div>
+                    <h3 class="processing-title">Initiating Payment</h3>
+                    <p class="processing-text">Setting up M-Pesa payment request...</p>
+                    
+                    <div class="processing-progress">
+                        <div class="progress-bar"></div>
+                    </div>
+
+                    <div class="payment-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Amount</span>
+                            <span class="detail-value" id="processingAmount">KSh 10</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Phone</span>
+                            <span class="detail-value" id="processingPhone">0720168641</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Method</span>
+                            <span class="detail-value">M-Pesa STK Push</span>
+                        </div>
+                    </div>
+
+                    <button class="cancel-button" onclick="cancelPayment()">
+                        Cancel Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chatContainer');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const subscriptionModal = document.getElementById('subscriptionModal');
+        const sidebar = document.getElementById('sidebar');
+
+        // Subscription state
+        let selectedPlanType = 'monthly';
+        const plans = {
+            daily: { name: 'Daily Plan', duration: '24 hours access', price: 10, days: '1 Day' },
+            monthly: { name: 'Monthly Plan', duration: '30 days access', price: 100, days: '30 Days' }
+        };
+
+        // Auto-resize textarea
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Handle Enter key
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Send Message Function
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            
+            if (message === '') return;
+
+            // Add user message
+            addMessage(message, 'user');
+            
+            // Clear input
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+            
+            // Show typing indicator
+            showTyping();
+            
+            // Simulate bot response after 2 seconds
+            setTimeout(() => {
+                hideTyping();
+                const responses = [
+                    "That's a very thoughtful question! Let me help you understand this concept better. Could you provide more details about which specific aspect you'd like to explore?",
+                    "Great question! This topic is fascinating. Here's what you need to know...",
+                    "I'd be happy to help you with that! Let's break this down step by step.",
+                    "Interesting question! This relates to several key concepts. Let me explain...",
+                    "I can definitely help with that. To give you the best answer, could you tell me more about your current understanding?"
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addMessage(randomResponse, 'bot');
+            }, 2000);
+        }
+
+        // Add message to chat
+        function addMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const time = new Date().toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            
+            const avatar = type === 'bot' ? '✨' : '👤';
+            const avatarClass = type === 'bot' ? 'bot' : 'user';
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar ${avatarClass}">${avatar}</div>
+                <div class="message-content">
+                    <div class="message-text">${text}</div>
+                    <div class="message-time">${time} ${type === 'bot' ? '📋' : ''}</div>
+                </div>
+            `;
+            
+            // Insert before typing indicator container
+            const typingMessage = document.querySelector('.message.bot:last-child');
+            chatContainer.insertBefore(messageDiv, typingMessage);
+            
+            // Scroll to bottom
+            scrollToBottom();
+        }
+
+        // Show typing indicator
+        function showTyping() {
+            typingIndicator.classList.add('active');
+            scrollToBottom();
+        }
+
+        // Hide typing indicator
+        function hideTyping() {
+            typingIndicator.classList.remove('active');
+        }
+
+        // Scroll to bottom
+        function scrollToBottom() {
+            setTimeout(() => {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 100);
+        }
+
+        // Toggle sidebar (mobile)
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+        }
+
+        // New chat
+        function newChat() {
+            if (confirm('Start a new chat? Current conversation will be saved to history.')) {
+                chatContainer.innerHTML = `
+                    <div class="message bot">
+                        <div class="message-avatar bot">✨</div>
+                        <div class="message-content">
+                            <div class="message-text">
+                                Hello! I'm your AI Study Assistant. How can I help you with your studies today?
+                            </div>
+                            <div class="message-time">${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })} 📋</div>
+                        </div>
+                    </div>
+                    <div class="message bot">
+                        <div class="message-avatar bot">✨</div>
+                        <div class="typing-indicator" id="typingIndicator">
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                        </div>
+                    </div>
+                `;
+                scrollToBottom();
+            }
+        }
+
+        // Subscription Modal Functions
+        function openSubscriptionModal() {
+            subscriptionModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSubscriptionModal() {
+            subscriptionModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            // Reset to plan selection
+            goToPlanSelection();
+        }
+
+        function selectPlan(planType) {
+            selectedPlanType = planType;
+            
+            // Update UI
+            document.querySelectorAll('.plan-card').forEach(card => {
+                card.classList.remove('selected');
+                const badge = card.querySelector('.selected-badge');
+                if (badge) badge.remove();
+            });
+            
+            const selectedCard = event.currentTarget;
+            selectedCard.classList.add('selected');
+            
+            const badge = document.createElement('span');
+            badge.className = 'selected-badge';
+            badge.textContent = 'Selected';
+            selectedCard.appendChild(badge);
+        }
+
+        function goToPhoneInput() {
+            // Update selected plan info
+            const plan = plans[selectedPlanType];
+            document.getElementById('selectedPlanName').textContent = plan.name;
+            document.getElementById('selectedPlanDuration').textContent = plan.duration;
+            document.getElementById('selectedPlanPrice').textContent = `KSh ${plan.price}`;
+            document.getElementById('summaryPlan').textContent = plan.name.replace(' Plan', ' Access');
+            document.getElementById('summaryDuration').textContent = plan.days;
+            document.getElementById('summaryTotal').textContent = `KSh ${plan.price}`;
+            document.getElementById('payAmount').textContent = `KSh ${plan.price}`;
+            
+            // Hide plan selection, show phone input
+            document.getElementById('stepPlanSelection').style.display = 'none';
+            document.getElementById('stepPhoneInput').style.display = 'block';
+        }
+
+        function goToPlanSelection() {
+            document.getElementById('stepPhoneInput').style.display = 'none';
+            document.getElementById('stepProcessing').style.display = 'none';
+            document.getElementById('stepPlanSelection').style.display = 'block';
+            
+            // Reset phone input
+            document.getElementById('phoneInput').value = '';
+            document.getElementById('phoneInput').classList.remove('error');
+            document.getElementById('phoneError').style.display = 'none';
+            document.getElementById('summaryPhone').textContent = 'Not entered';
+            document.getElementById('payButton').disabled = true;
+        }
+
+        function validatePhone() {
+            const phoneInput = document.getElementById('phoneInput');
+            const phoneError = document.getElementById('phoneError');
+            const summaryPhone = document.getElementById('summaryPhone');
+            const payButton = document.getElementById('payButton');
+            
+            const phone = phoneInput.value.trim();
+            
+            if (phone.length === 0) {
+                phoneInput.classList.add('error');
+                phoneError.textContent = 'Phone number is required';
+                phoneError.style.display = 'flex';
+                summaryPhone.textContent = 'Not entered';
+                payButton.disabled = true;
+                return false;
+            }
+            
+            if (phone.length !== 9) {
+                phoneInput.classList.add('error');
+                phoneError.textContent = 'Phone number must be 9 digits';
+                phoneError.style.display = 'flex';
+                summaryPhone.textContent = 'Not entered';
+                payButton.disabled = true;
+                return false;
+            }
+            
+            if (!/^[0-9]+$/.test(phone)) {
+                phoneInput.classList.add('error');
+                phoneError.textContent = 'Phone number must contain only digits';
+                phoneError.style.display = 'flex';
+                summaryPhone.textContent = 'Not entered';
+                payButton.disabled = true;
+                return false;
+            }
+            
+            // Valid phone number
+            phoneInput.classList.remove('error');
+            phoneError.style.display = 'none';
+            summaryPhone.textContent = `0${phone}`;
+            payButton.disabled = false;
+            return true;
+        }
+
+        function initiatePayment() {
+            if (!validatePhone()) return;
+            
+            const phone = document.getElementById('phoneInput').value.trim();
+            const plan = plans[selectedPlanType];
+            
+            // Update processing details
+            document.getElementById('processingAmount').textContent = `KSh ${plan.price}`;
+            document.getElementById('processingPhone').textContent = `0${phone}`;
+            
+            // Hide phone input, show processing
+            document.getElementById('stepPhoneInput').style.display = 'none';
+            document.getElementById('stepProcessing').style.display = 'block';
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                // You would normally handle payment response here
+                alert('Payment initiated! Check your phone for M-Pesa prompt.');
+                closeSubscriptionModal();
+            }, 3000);
+        }
+
+        function cancelPayment() {
+            if (confirm('Are you sure you want to cancel this payment?')) {
+                goToPhoneInput();
+            }
+        }
+
+        // Close modal when clicking outside
+        subscriptionModal.addEventListener('click', function(e) {
+            if (e.target === subscriptionModal) {
+                closeSubscriptionModal();
+            }
+        }); 
+
+        // Initial scroll to bottom
+        scrollToBottom();
+    </script>
+</body>
+</html>
